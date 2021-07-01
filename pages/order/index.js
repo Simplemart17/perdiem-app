@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import USERS from '../../data/users.json'
 
 const OrderPage = () => {
   return (
@@ -14,19 +15,15 @@ const OrderPage = () => {
         <Link href="/profile">
           <a>Go to profile</a>
         </Link>
+        <div>
+          {USERS.map((data) => (
+            <div key={data.id}>
+              <p>{data.firstname}</p>
+              <p>{data.lastname}</p>
+            </div>
+          ))}
+        </div>
       </main>
-
-      <footer className="flex items-center justify-center w-full h-24 border-t">
-        <a
-          className="flex items-center justify-center"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
-        </a>
-      </footer>
     </div>
   )
 }
