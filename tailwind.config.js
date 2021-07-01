@@ -8,5 +8,21 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    function ({ addComponents }) {
+      const customClassName = {
+        '.label': {
+          transform: 'translateY(-50%)',
+        },
+        '.floatLabel': {
+          transform: 'translateY(-100%)',
+        },
+        '.labelTrans': {
+          transition: 'all 0.2s ease-in-out',
+        },
+      }
+
+      addComponents(customClassName)
+    },
+  ],
 }
