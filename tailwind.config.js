@@ -3,7 +3,14 @@ module.exports = {
   purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'select-caret': "url('/caret.svg')",
+      },
+      backgroundPosition: {
+        'custom-right': 'center right 1rem',
+      },
+    },
   },
   variants: {
     extend: {},
@@ -14,10 +21,10 @@ module.exports = {
         '.label': {
           transform: 'translateY(-50%)',
         },
-        '.floatLabel': {
+        '.float-label': {
           transform: 'translateY(-100%)',
         },
-        '.labelTrans': {
+        '.label-trans': {
           transition: 'all 0.2s ease-in-out',
         },
       }

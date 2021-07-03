@@ -4,7 +4,6 @@ import axios from 'axios'
 import { verifyToken, getAppCookies, logout } from '../../middleware/utils'
 import EditProfile from '../../components/editProfile'
 import protectedRoute from '../protectedRoute'
-import { useRouter } from 'next/router'
 import ProfileDetails from '../../components/details'
 import Layout from '../../components/layout'
 
@@ -30,7 +29,7 @@ const Profile = ({ profile }) => {
       editProfile={editProfile}
       logout={logout}
     >
-      <div className="relative md:w-[36rem] sm:mx-auto py-20">
+      <div className="relative md:w-[30rem] lg:w-[36rem] sm:mx-auto py-20">
         <div className="relative flex z-10 w-24 h-24 p-1 mt-[-15%] m-auto bg-[#f3f1f1] rounded-2xl top-16 border border-[#3d63ca]">
           <Image
             src="https://res.cloudinary.com/drmrayjr0/image/upload/v1559304041/profile_mbyrmu.jpg"
