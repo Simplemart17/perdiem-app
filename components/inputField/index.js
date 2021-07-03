@@ -53,9 +53,11 @@ const InputField = ({
         disabled={isDisabled}
       />
       <label
-        className={`absolute left-[0.75rem] top-1/2 text-[#A6ADB4] pointer-events-none labelTrans 
+        className={`absolute left-[0.75rem] top-1/2 text-[#A6ADB4] pointer-events-none label-trans 
       ${
-        active || props.value ? 'floatLabel text-xs font-bold' : 'label text-sm'
+        active || props.value
+          ? 'float-label text-xs font-bold'
+          : 'label text-sm'
       }`}
       >
         {label}
