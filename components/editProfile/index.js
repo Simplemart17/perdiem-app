@@ -40,6 +40,7 @@ const EditProfile = ({ user, setEditProfile, userId }) => {
           <div className="flex flex-wrap justify-between mt-5">
             <Input
               name="firstname"
+              id="firstname"
               className="w-full mb-2"
               errorMessage={errors.firstname}
               placeholder="First Name"
@@ -51,6 +52,7 @@ const EditProfile = ({ user, setEditProfile, userId }) => {
             <Input
               className="w-full mb-2"
               name="lastname"
+              id="lastname"
               errorMessage={errors.lastname}
               placeholder="Last Name"
               onChange={handleChange}
@@ -62,6 +64,7 @@ const EditProfile = ({ user, setEditProfile, userId }) => {
           <div className="flex flex-wrap justify-between">
             <Input
               name="email"
+              id="email"
               className="w-full mb-2"
               errorMessage={errors.email}
               placeholder="Email"
@@ -74,6 +77,7 @@ const EditProfile = ({ user, setEditProfile, userId }) => {
               className="w-full mb-2"
               name="password"
               type="password"
+              id="password"
               errorMessage={errors.password}
               placeholder="Password"
               onChange={handleChange}

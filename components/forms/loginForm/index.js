@@ -25,18 +25,22 @@ const Login = () => {
     initialValues: { email: '', password: '' },
     validationSchema,
     async onSubmit(values) {
-      const { data } = await axios.post('/api/auth', values)
+      try {
+        const { data } = await axios.post('/api/auth', values)
 
-      if (data.success) {
-        Cookies.set('token', data.token)
+        if (data.success) {
+          Cookies.set('token', data.token)
 
-        router.push('/profile')
-      } else {
-        setApiError(data.error)
-        // clear validation error state
-        setTimeout(() => {
-          setApiError('')
-        }, 3000)
+          router.push('/profile')
+        } else {
+          setApiError(data.error)
+          // clear validation error state
+          setTimeout(() => {
+            setApiError('')
+          }, 3000)
+        }
+      } catch (error) {
+        console.log(error, 'catching error now')
       }
     },
   })
@@ -52,23 +56,25 @@ const Login = () => {
           className="mb-4"
           name="email"
           type="email"
+          id="email"
           placeholder="Email Address"
           onChange={handleChange}
           onBlur={handleBlur}
           edited={touched}
           value={values.email}
-          errorMessage={errors && errors.email}
+          errorMessage={errors.email}
         />
         <InputField
           className="mb-2"
           name="password"
           type="password"
+          id="password"
           placeholder="Password"
           onChange={handleChange}
           onBlur={handleBlur}
           edited={touched}
           value={values.password}
-          errorMessage={errors && errors.password}
+          errorMessage={errors.password}
         />
         {apiError && (
           <p className="mt-1 text-xs text-left text-red-500">{apiError}</p>
