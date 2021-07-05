@@ -1,13 +1,9 @@
 import Router from 'next/router'
-import cookies from 'js-cookie'
+import Cookies from 'js-cookie'
 import jwt from 'jsonwebtoken'
 
 const SECRET = process.env.JWT_KEY
 
-/*
- * @params {string} jwtToken
- * @return {object} object
- */
 export function verifyToken(jwtToken) {
   try {
     return jwt.verify(jwtToken, SECRET)
@@ -27,6 +23,6 @@ export function getAppCookies(req) {
 
 export function logout(e) {
   e.preventDefault()
-  cookies.remove('token')
+  Cookies.remove('token')
   Router.push('/login')
 }
