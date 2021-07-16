@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useFormik } from 'formik'
 import axios from 'axios'
@@ -10,8 +9,6 @@ import InputField from '../../inputField'
 const Login = () => {
   const router = useRouter()
 
-  const [apiError, setApiError] = useState('')
-
   const {
     handleChange,
     handleSubmit,
@@ -21,26 +18,22 @@ const Login = () => {
     handleBlur,
     touched,
     dirty,
+    setFieldError,
   } = useFormik({
     initialValues: { email: '', password: '' },
     validationSchema,
     async onSubmit(values) {
       try {
         const { data } = await axios.post('/api/auth', values)
-
         if (data.success) {
           Cookies.set('token', data.token)
 
           router.push('/profile')
-        } else {
-          setApiError(data.error)
-          // clear validation error state
-          setTimeout(() => {
-            setApiError('')
-          }, 3000)
         }
       } catch (error) {
-        console.log(error, 'catching error now')
+        if (error.response) {
+          setFieldError('password', error.response.data.error)
+        }
       }
     },
   })
@@ -76,9 +69,6 @@ const Login = () => {
           value={values.password}
           errorMessage={errors.password}
         />
-        {apiError && (
-          <p className="mt-1 text-xs text-left text-red-500">{apiError}</p>
-        )}
         <div className="flex items-center justify-center mt-8">
           <Button
             type="submit"

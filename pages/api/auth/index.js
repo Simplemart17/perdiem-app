@@ -7,51 +7,43 @@ const PRIVATE_KEY = process.env.JWT_KEY
 export default async function auth(req, res) {
   const { method } = req
 
-  try {
-    switch (method) {
-      case 'POST':
-        const { email, password } = req.body
+  if (method !== 'POST') {
+    return res.status(405).end()
+  }
 
-        const user = USERS.find((user) => {
-          return user.email === email
-        })
+  const { email, password } = req.body
 
-        if (!user) {
-          return res.json({ success: false, error: 'No user found' })
-        }
+  const user = USERS.find((user) => {
+    return user.email === email
+  })
 
-        if (user) {
-          const userId = user.id,
-            userEmail = user.email,
-            userPassword = user.password
+  if (!user) {
+    return res.status(404).json({ success: false, error: 'No user found' })
+  }
 
-          const isMatch = userPassword === password
+  if (user) {
+    const userId = user.id,
+      userEmail = user.email,
+      userPassword = user.password
 
-          if (!isMatch) {
-            return res.json({
-              success: false,
-              error: 'Email/password is incorrect',
-            })
-          }
+    const isMatch = userPassword === password
 
-          const payload = {
-            id: userId,
-            email: userEmail,
-          }
-
-          const token = jwt.sign(payload, PRIVATE_KEY, {
-            expiresIn: 31556926,
-          })
-
-          return res.status(200).json({ success: true, token })
-        }
-        break
-      case 'PUT':
-        break
-      default:
-        break
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        error: 'Email/password is incorrect',
+      })
     }
-  } catch (error) {
-    throw error
+
+    const payload = {
+      id: userId,
+      email: userEmail,
+    }
+
+    const token = jwt.sign(payload, PRIVATE_KEY, {
+      expiresIn: 31556926,
+    })
+
+    return res.status(200).json({ success: true, token })
   }
 }

@@ -1,5 +1,15 @@
-import { render, screen, cleanup, fireEvent, act } from '@testing-library/react'
+import {
+  render,
+  screen,
+  cleanup,
+  fireEvent,
+  act,
+  waitFor,
+} from '@testing-library/react'
 import Login from '../pages/index'
+import axios from 'axios'
+
+jest.mock('axios')
 
 afterEach(cleanup)
 
@@ -69,5 +79,47 @@ describe('Check login page form validation', () => {
       screen.queryByText('The character is too short!'),
     ).not.toBeInTheDocument()
     expect(screen.getByTestId('button')).not.toHaveClass('cursor-not-allowed')
+  })
+})
+
+describe('Login page test', () => {
+  it('should log in successfully with right credentials', async () => {
+    render(<Login />)
+
+    axios.get.mockImplementation(() =>
+      Promise.resolve({
+        data: { success: true, token: 'token_returned' },
+      }),
+    )
+
+    const email = 'j.martins@gmail.com'
+    const password = 'password3'
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(/email address/i), {
+        target: { value: email },
+      })
+    })
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(/password/i), {
+        target: { value: password },
+      })
+    })
+
+    await act(async () => {
+      fireEvent.click(screen.getByText('Login'))
+    })
+
+    await waitFor(
+      () => expect(axios.post).toHaveBeenCalledTimes(1),
+      expect(axios.post).toHaveBeenCalledWith(
+        '/api/auth',
+        expect.objectContaining({
+          email,
+          password,
+        }),
+      ),
+    )
   })
 })
