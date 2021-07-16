@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useFormik } from 'formik'
 import axios from 'axios'
 import Input from '../inputField'
@@ -5,6 +6,8 @@ import Button from '../button'
 import validationSchema from './validation'
 
 const EditProfile = ({ user, setEditProfile, userId }) => {
+  const [isLoading, setIsLoading] = useState(false)
+
   const {
     handleSubmit,
     handleChange,
@@ -21,12 +24,19 @@ const EditProfile = ({ user, setEditProfile, userId }) => {
     initialValues: user,
     validationSchema,
     async onSubmit(values) {
-      const { data } = await axios.put(`/api/auth/${userId}`, values)
-      if (!data.success) {
-        setFieldError('email', data.error)
-        return
+      try {
+        setIsLoading(true)
+        const { data } = await axios.put(`/api/auth/${userId}`, values)
+        if (data.success) {
+          setEditProfile(false)
+          setIsLoading(false)
+        }
+      } catch (error) {
+        setIsLoading(false)
+        if (error.response) {
+          setFieldError('email', error.response.data.error)
+        }
       }
-      setEditProfile(false)
     },
   })
 
@@ -92,12 +102,13 @@ const EditProfile = ({ user, setEditProfile, userId }) => {
       <div className="mt-8">
         <Button
           type="submit"
-          disabled={!(isValid && dirty)}
+          disabled={!(isValid && dirty) || isLoading}
           className={
-            !(isValid && dirty)
+            !(isValid && dirty) || isLoading
               ? 'text-gray-600 bg-gray-200 cursor-not-allowed border border-gray-300 w-full font-bold'
               : 'bg-[#4E74A6] hover:bg-[#3c69a6] text-white w-full font-bold'
           }
+          isLoading={isLoading}
           name="Update"
           onClick={handleSubmit}
         />

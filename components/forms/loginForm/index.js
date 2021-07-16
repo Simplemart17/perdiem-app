@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useFormik } from 'formik'
 import axios from 'axios'
@@ -8,6 +9,7 @@ import InputField from '../../inputField'
 
 const Login = () => {
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
 
   const {
     handleChange,
@@ -24,13 +26,16 @@ const Login = () => {
     validationSchema,
     async onSubmit(values) {
       try {
+        setIsLoading(true)
         const { data } = await axios.post('/api/auth', values)
         if (data.success) {
+          setIsLoading(false)
           Cookies.set('token', data.token)
 
           router.push('/profile')
         }
       } catch (error) {
+        setIsLoading(false)
         if (error.response) {
           setFieldError('password', error.response.data.error)
         }
@@ -72,11 +77,12 @@ const Login = () => {
         <div className="flex items-center justify-center mt-8">
           <Button
             type="submit"
-            disabled={!(isValid && dirty)}
+            disabled={!(isValid && dirty) || isLoading}
             onClick={handleSubmit}
             name="Login"
+            isLoading={isLoading}
             className={
-              !(isValid && dirty)
+              !(isValid && dirty) || isLoading
                 ? 'text-gray-600 bg-gray-200 cursor-not-allowed w-full font-bold'
                 : 'bg-[#4E74A6] hover:bg-[#3c69a6] text-white w-full font-bold'
             }
