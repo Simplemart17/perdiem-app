@@ -9,8 +9,7 @@ import InputField from '../../inputField'
 
 const Login = () => {
   const router = useRouter()
-
-  const [apiError, setApiError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const {
     handleChange,
@@ -21,26 +20,25 @@ const Login = () => {
     handleBlur,
     touched,
     dirty,
+    setFieldError,
   } = useFormik({
     initialValues: { email: '', password: '' },
     validationSchema,
     async onSubmit(values) {
       try {
+        setIsLoading(true)
         const { data } = await axios.post('/api/auth', values)
-
         if (data.success) {
+          setIsLoading(false)
           Cookies.set('token', data.token)
 
           router.push('/profile')
-        } else {
-          setApiError(data.error)
-          // clear validation error state
-          setTimeout(() => {
-            setApiError('')
-          }, 3000)
         }
       } catch (error) {
-        console.log(error, 'catching error now')
+        setIsLoading(false)
+        if (error.response) {
+          setFieldError('password', error.response.data.error)
+        }
       }
     },
   })
@@ -76,17 +74,15 @@ const Login = () => {
           value={values.password}
           errorMessage={errors.password}
         />
-        {apiError && (
-          <p className="mt-1 text-xs text-left text-red-500">{apiError}</p>
-        )}
         <div className="flex items-center justify-center mt-8">
           <Button
             type="submit"
-            disabled={!(isValid && dirty)}
+            disabled={!(isValid && dirty) || isLoading}
             onClick={handleSubmit}
             name="Login"
+            isLoading={isLoading}
             className={
-              !(isValid && dirty)
+              !(isValid && dirty) || isLoading
                 ? 'text-gray-600 bg-gray-200 cursor-not-allowed w-full font-bold'
                 : 'bg-[#4E74A6] hover:bg-[#3c69a6] text-white w-full font-bold'
             }
