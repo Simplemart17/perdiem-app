@@ -1,7 +1,16 @@
 import { useState } from 'react'
 import get from 'lodash.get'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-const InputField = ({ errorMessage, onBlur, edited, className, ...props }) => {
+const InputField = ({
+  errorMessage,
+  onBlur,
+  edited,
+  className,
+  icon,
+  onClick,
+  ...props
+}) => {
   const [active, setActive] = useState(false)
   const [focus, setFocus] = useState(false)
 
@@ -38,12 +47,19 @@ const InputField = ({ errorMessage, onBlur, edited, className, ...props }) => {
         : 'border-gray-300'
     }`}
     >
-      <input
-        {...props}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        className="box-border w-full h-full pt-4 text-base leading-tight text-gray-800 bg-transparent border-0 outline-none"
-      />
+      <div className="flex items-center">
+        <input
+          {...props}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          className="box-border w-full h-full pt-4 text-base leading-tight text-gray-800 bg-transparent border-0 outline-none"
+        />
+        {icon && (
+          <div className="cursor-pointer" onClick={onClick}>
+            <FontAwesomeIcon icon={icon} color="#474849" className="w-5" />
+          </div>
+        )}
+      </div>
       <label
         className={`absolute left-[0.75rem] top-1/2 text-[#A6ADB4] pointer-events-none label-trans 
       ${

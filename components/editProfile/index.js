@@ -4,9 +4,11 @@ import axios from 'axios'
 import Input from '../inputField'
 import Button from '../button'
 import validationSchema from './validation'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 const EditProfile = ({ user, setEditProfile, userId }) => {
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const {
     handleSubmit,
@@ -86,7 +88,7 @@ const EditProfile = ({ user, setEditProfile, userId }) => {
             <Input
               className="w-full mb-2"
               name="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               id="password"
               errorMessage={errors.password}
               placeholder="Password"
@@ -94,6 +96,8 @@ const EditProfile = ({ user, setEditProfile, userId }) => {
               onBlur={handleBlur}
               edited={touched}
               value={values.password}
+              icon={showPassword ? faEye : faEyeSlash}
+              onClick={() => setShowPassword(!showPassword)}
             />
           </div>
         </div>

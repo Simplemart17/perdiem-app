@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useFormik } from 'formik'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import validationSchema from './validation'
 import Button from '../../button'
 import InputField from '../../inputField'
@@ -10,6 +11,7 @@ import InputField from '../../inputField'
 const Login = () => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const {
     handleChange,
@@ -65,7 +67,7 @@ const Login = () => {
         <InputField
           className="mb-2"
           name="password"
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           id="password"
           placeholder="Password"
           onChange={handleChange}
@@ -73,6 +75,8 @@ const Login = () => {
           edited={touched}
           value={values.password}
           errorMessage={errors.password}
+          icon={showPassword ? faEye : faEyeSlash}
+          onClick={() => setShowPassword(!showPassword)}
         />
         <div className="flex items-center justify-center mt-8">
           <Button
