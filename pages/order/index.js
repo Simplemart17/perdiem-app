@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Layout from '../../components/layout'
-import { logout } from '../../middleware/utils'
+import { verifyToken, getAppCookies, logout } from '../../middleware/utils'
 import OrderCard from '../../components/orderCard'
 import Select from '../../components/select'
+import protectedRoute from '../protectedRoute'
 
 const OrderPage = () => {
   const [order, setOrder] = useState([])
@@ -55,4 +56,17 @@ const OrderPage = () => {
   )
 }
 
-export default OrderPage
+export async function getServerSideProps(context) {
+  const { req } = context
+
+  const { token } = getAppCookies(req)
+  const profile = token ? verifyToken(token) : ''
+
+  return {
+    props: {
+      profile,
+    },
+  }
+}
+
+export default protectedRoute(OrderPage)
