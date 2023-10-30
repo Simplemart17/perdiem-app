@@ -1,28 +1,28 @@
-import Router from 'next/router'
-import Cookies from 'js-cookie'
-import jwt from 'jsonwebtoken'
+import Router from "next/router";
+import Cookies from "js-cookie";
+import jwt from "jsonwebtoken";
 
-const SECRET = process.env.JWT_KEY
+const SECRET = process.env.JWT_KEY;
 
 export function verifyToken(jwtToken) {
   try {
-    return jwt.verify(jwtToken, SECRET)
+    return jwt.verify(jwtToken, SECRET);
   } catch (err) {
-    return null
+    return null;
   }
 }
 
 export function getAppCookies(req) {
-  const parsedItems = {}
+  const parsedItems = {};
   if (req.headers.cookie) {
-    const cookie = req.headers.cookie.split('=')
-    parsedItems[cookie[0]] = decodeURI(cookie[1])
+    const cookie = req.headers.cookie.split("=");
+    parsedItems.token = decodeURI(cookie[2]);
   }
-  return parsedItems
+  return parsedItems;
 }
 
 export function logout(e) {
-  e.preventDefault()
-  Cookies.remove('token')
-  Router.push('/login')
+  e.preventDefault();
+  Cookies.remove("token");
+  Router.push("/login");
 }

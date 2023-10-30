@@ -1,26 +1,26 @@
-import { useState, useEffect } from 'react'
-import Image from 'next/image'
-import axios from 'axios'
-import { verifyToken, getAppCookies, logout } from '../../middleware/utils'
-import EditProfile from '../../components/editProfile'
-import protectedRoute from '../protectedRoute'
-import ProfileDetails from '../../components/details'
-import Layout from '../../components/layout'
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import axios from "axios";
+import { verifyToken, getAppCookies, logout } from "../../middleware/utils";
+import EditProfile from "../../components/editProfile";
+import protectedRoute from "../protectedRoute";
+import ProfileDetails from "../../components/details";
+import Layout from "../../components/layout";
 
 const Profile = ({ profile }) => {
-  const [editProfile, setEditProfile] = useState(false)
-  const [user, setUser] = useState()
+  const [editProfile, setEditProfile] = useState(false);
+  const [user, setUser] = useState();
 
-  const { id } = profile
+  const { id } = profile;
 
   useEffect(() => {
     const fetch = async () => {
-      const { data } = await axios.get(`/api/auth/${id}`)
-      setUser(data.user)
-    }
+      const { data } = await axios.get(`/api/auth/${id}`);
+      setUser(data.user);
+    };
 
-    fetch()
-  }, [editProfile, id])
+    fetch();
+  }, [editProfile, id]);
 
   return (
     <Layout
@@ -52,20 +52,23 @@ const Profile = ({ profile }) => {
         </div>
       </div>
     </Layout>
-  )
-}
+  );
+};
 
 export async function getServerSideProps(context) {
-  const { req } = context
+  const { req } = context;
 
-  const { token } = getAppCookies(req)
-  const profile = token ? verifyToken(token) : ''
+  const { token } = getAppCookies(req);
+  // console.log(token, "token", context);
+  const profile = token ? verifyToken(token) : "";
+  console.log(profile, "this is the profile");
 
   return {
     props: {
       profile,
     },
-  }
+  };
 }
 
-export default protectedRoute(Profile)
+// export default Profile;
+export default protectedRoute(Profile);

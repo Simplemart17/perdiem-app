@@ -1,17 +1,17 @@
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 
 export default function protectedRoute(WrappedComponent) {
   return (props) => {
-    if (typeof window !== 'undefined') {
-      const Router = useRouter()
+    if (typeof window !== "undefined") {
+      const Router = useRouter();
 
       if (!props.profile) {
-        Router.replace('/login')
-        return null
+        Router.replace("/login");
+        return null;
       }
-      return <WrappedComponent {...props} />
+      return <WrappedComponent {...props} />;
     } else {
-      return null
+      return null;
     }
-  }
+  };
 }
